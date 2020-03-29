@@ -22,23 +22,48 @@ const Display = ({ uiDisplay }) =>{
   ) 
 }
 
+const HighestVote = ({votes, anecdote}) => {
+  let anecdoteNum = votes.indexOf(Math.max(...votes));
+
+  if(votes[anecdoteNum] === 0){
+
+    return (
+      <div>
+        <p>There is no votes yet! start voting.</p>
+      </div>
+    )
+  } else {
+
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdote[anecdoteNum]}</p>
+      <p>With {votes[anecdoteNum]} votes</p>
+    </div>
+    )
+  }
+}
+
 const App = (props) =>{
   const [selected, setSelected] = useState(0);
-  const [vote, setVote] = useState(0)
-
-  const votesForEach = [0,0,0,0,0,0]
-  const copyOfVotes = [...votesForEach];
+  const [vote, setVote] = useState([0,0,0,0,0,0]);
 
   const nextButton = () => setSelected(Math.floor(Math.random() * 5))
-  const voteButton = () => setVote(vote + 1)
+  const voteButton = () => {
+    const copyOfVotes = [...vote];
+    copyOfVotes[selected] +=1;
+    setVote(copyOfVotes)
+
+  }
 
   return (
   <div>
     <h1>Quotes for Software Engineers</h1>
     <p>{props.anecdotes[selected]}</p>
     <Button onClick={nextButton} text={'Get a quote'}/>
-    <Display uiDisplay={copyOfVotes[selected]}/>
+    <Display uiDisplay={vote[selected]}/>
     <Button onClick={voteButton} text={'Vote the quote'}/>
+    <HighestVote votes={vote} anecdote={anecdotes}/>
   </div>
   
   )
